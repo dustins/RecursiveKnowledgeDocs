@@ -1,0 +1,260 @@
+<h1>Basic MVC</h1>
+
+<h2><del>Model</del> View Controller</h2>
+
+<p>In this chapter you don't need to concern yourself with the &ldquo;model&rdquo; aspect of MVC. Adding that in isn't difficult at all, but it isn't necessary right now, and that will come in the following chapter.</p>
+
+<h2>View</h2>
+
+<p>Since we can skip the model, you can get straight to creating the view. It is incredibly simple and only outputs <quote>Hellow World!</quote>, but you just need something so you can get an idea in of displaying your views contents.</p>
+
+<div class="file-contents">
+    <p class="name">src/main/webapp/WEB-INF/views/home/index.jsp</p>
+{% filter pygments({lexer: 'diff'}) %}
++ <%@ page contentType="text/html;charset=UTF-8" language="java" %>
++ <html>
++ <head>
++     <title>Home</title>
++ </head>
++ <body>
++     <h2>Hello World!</h2>
++ </body>
++ </html>
+{% endfilter %}
+</div>
+
+<p>After you created that file, you can go ahead and remove the original <em class="file">index.jsp</em> that was automatically created for us by Maven since we won't be using it.</p>
+
+<div class="file-contents">
+    <p class="name">src/main/webapp/index.jsp</p>
+{% filter pygments({lexer: 'diff'}) %}
+-<html>
+-<body>
+-<h2>Hello World!</h2>
+-</body>
+-</html>
+{% endfilter %}
+</div>
+
+<h2>Controller</h2>
+
+<p>Spring makes making a controller incredibly easy, by simply adding the <code>@Controller</code> annotation your class lets Spring know that you plan on using that object as a controller. Spring will automatically scan all objects in its context for the <code>@RequestMapping</code> annotation that maps a url to a method. In the case below, the url is <quote>/</quote> and is mapped to our <quote>index</quote> method that returns a <code>String</code>.</p>
+
+<p class="bg-info note"><i class="fa fa-info-circle"></i>Because of problems you may run into when Spring Framework has to proxy (don't worry if you don't know what that is just yet) a concrete class for multiple annotations, it easier to create an interface for your controllers and apply your annotations to them instead of the implementations.</p>
+
+<div class="file-contents">
+    <p class="name">src/main/java/com/recursiveknowledge/site/HomeController.java</p>
+{% filter pygments({lexer: 'diff'}) %}
++ package com.recursiveknowledge.site;
++
++ import org.springframework.stereotype.Controller;
++ import org.springframework.web.bind.annotation.RequestMapping;
++
++ @Controller
++ public interface HomeController {
++     @RequestMapping(value = {"/"})
++     String index();
++ }
+{% endfilter %}
+</div>
+
+<p>Now you can create the implementation to that interface. A little further down you'll see how that return value is used by Spring to figure out what view to use.</p>
+
+<div class="file-contents">
+    <p class="name">src/main/java/com/recursiveknowledge/site/HomeControllerImpl.java</p>
+{% filter pygments({lexer: 'diff'}) %}
++ package com.recursiveknowledge.site;
++
++ import org.springframework.stereotype.Component;
++
++ @Component
++ public class HomeControllerImpl implements HomeController {
++     @Override
++     public String index() {
++         return "home/index";
++     }
++ }
+{% endfilter %}
+</div>
+
+<h2>Configuring Spring</h2>
+
+<p>You now have a controller and a view, but there is nothing tying those to whatever Java Servlet you decide to use. To fix that you can work your way down the chain of events that happen when a user hits the web server. The first thing that happens when a request is made by a browser, your web server will look to see if any Servlets are mapped to the <abbr title="universal resource locator">URL</abbr>. Because we'll be configuring Springs DispatcherServlet, it will attempt to do a similar thing as the web server, and look for any mappings defined by <code>@RequestMapping</code> to handle the request. If it finds a suitable method, it will then work on rendering the view after that method returns.</p>
+
+<p>Because you'll have to program to the Java Servlet interface, you should go ahead and include the API in our project.</p>
+
+<div class="file-contents">
+    <p class="name">pom.xml</p>
+{% filter pygments({lexer: 'diff'}) %}
+...
+        <!-- spring projects -->
+        <spring-framework.version>4.0.3.RELEASE</spring-framework.version>
+
++        <!-- web -->
++        <servlet.version>3.1.0</servlet.version>
+
+        <!-- logging -->
+        <slf4j.version>1.7.6</slf4j.version>
+...
+
+...
+        </exclusions>
+        </dependency>
+
++        <dependency>
++            <groupId>javax.servlet</groupId>
++            <artifactId>javax.servlet-api</artifactId>
++            <version>${servlet.version}</version>
++        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+...
+{% endfilter %}
+</div>
+
+<p>Now your project knows about Servlets and related classes, go ahead and create a class to create/configure our DispatcherServlet. In the next step, you'll create the class <quote>AppConfig.class</quote>, so don't worry that you don't know what that is.</p>
+
+<div class="file-contents">
+    <p class="name">src/main/java/com/recursiveknowledge/site/WebAppInitializer.java</p>
+{% filter pygments({lexer: 'diff'}) %}
++ package com.recursiveknowledge.site;
++
++ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
++
++ import javax.servlet.Filter;
++
++ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
++     @Override
++     protected Class<?>[] getRootConfigClasses() {
++         return new Class[] {AppConfig.class};
++     }
++
++     @Override
++     protected Class<?>[] getServletConfigClasses() {
++         return new Class<?>[0];
++     }
++
++     @Override
++     protected String[] getServletMappings() {
++         return new String[] {"/"};
++     }
++ }
+{% endfilter %}
+</div>
+
+<p>Our WebAppInitializer class acts as a replacement for the standard <em class="file">web.xml</em> file, so you can also delete that Maven generated file, just like you did the <em class="file">index.jsp</em>.</p>
+
+<div class="file-contents">
+    <p class="name">src/main/webapp/WEB-INF/web.xml</p>
+{% filter pygments({lexer: 'diff'}) %}
+- <!DOCTYPE web-app PUBLIC
+-  "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+-  "http://java.sun.com/dtd/web-app_2_3.dtd" >
+-
+- <web-app>
+-   <display-name>Archetype Created Web Application</display-name>
+- </web-app>
+{% endfilter %}
+</div>
+
+<p>This class acts as the entry point for our Spring applications configuration. You can tell it is a configuration class by the <code>@Configuration</code> annotation on it. It enables Spring's MVC functionality with the <code>@EnableWebMvc</code> annotation, and sets itself as the default ServletHandler by overriding one of its parent methods. Most importantly though, it is where you can include other configuration classes by using the <code>@Import</code> annotation. You can see we plan on adding a configuration class strictly for web configuration. So you can create that now too.</p>
+
+<div class="file-contents">
+    <p class="name">src/main/java/com/recursiveknowledge/site/AppConfig.java</p>
+{% filter pygments({lexer: 'diff'}) %}
++ package com.recursiveknowledge.site;
++
++ import org.springframework.context.annotation.Configuration;
++ import org.springframework.context.annotation.Import;
++ import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
++ import org.springframework.web.servlet.config.annotation.DelegatingWebMvcConfiguration;
++ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
++
++ @Configuration
++ @EnableWebMvc
++ @Import({WebConfig.class})
++ public class AppConfig extends DelegatingWebMvcConfiguration {
++     @Override
++     protected void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
++         configurer.enable();
++     }
++ }
+{% endfilter %}
+</div>
+
+<p>asdfs</p>
+
+<div class="file-contents">
+    <p class="name">src/main/java/com/recursiveknowledge/site/WebConfig.java</p>
+{% filter pygments({lexer: 'diff'}) %}
++ package com.recursiveknowledge.site;
++
++ import org.springframework.context.annotation.Bean;
++ import org.springframework.context.annotation.ComponentScan;
++ import org.springframework.context.annotation.Configuration;
++ import org.springframework.context.annotation.FilterType;
++ import org.springframework.core.Ordered;
++ import org.springframework.web.servlet.ViewResolver;
++ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
++ import org.springframework.web.servlet.view.InternalResourceView;
++ import org.springframework.web.servlet.view.UrlBasedViewResolver;
++
++ @Configuration
++ @ComponentScan(basePackages = "com.recursiveknowledge.site", includeFilters = {
++         @ComponentScan.Filter(type = FilterType.REGEX, pattern = ".+?Controller(Impl)?")
++ })
++ public class WebConfig extends WebMvcConfigurerAdapter {
++     @Bean
++     public ViewResolver jspViewResolver() {
++         UrlBasedViewResolver viewResolver = new UrlBasedViewResolver();
++         viewResolver.setViewClass(InternalResourceView.class);
++         viewResolver.setPrefix("/WEB-INF/views/");
++         viewResolver.setSuffix(".jsp");
++         viewResolver.setOrder(Ordered.LOWEST_PRECEDENCE);
++
++         return viewResolver;
++     }
++ }
+{% endfilter %}
+</div>
+
+<div class="file-contents">
+    <p class="name">src/main/java/com/recursiveknowledge/site/WebAppInitializer.java</p>
+{% filter pygments({lexer: 'diff'}) %}
+...
+        return new String[] {"/"};
+    }
+
++     @Override
++     protected Filter[] getServletFilters() {
++         UrlRewriteFilter urlRewriteFilter = new UrlRewriteFilter();
++
++         return new Filter[]{urlRewriteFilter};
++     }
+}
+{% endfilter %}
+</div>
+
+<div class="file-contents">
+    <p class="name">src/main/webapp/WEB-INF/urlrewrite.xml</p>
+{% filter pygments({lexer: 'diff'}) %}
++ <?xml version="1.0" encoding="utf-8"?>
++ <!DOCTYPE urlrewrite PUBLIC "-//tuckey.org//DTD UrlRewrite 4.0//EN"
++         "http://www.tuckey.org/res/dtds/urlrewrite4.0.dtd">
++ <urlrewrite>
++     <rule>
++         <note>redirect `/` to `/home`</note>
++
++         <from>^/$</from>
++         <to type="redirect">%{context-path}/home</to>
++     </rule>
++     <rule>
++         <note>remove trailing slashes</note>
++
++         <from>(.*)/$</from>
++         <to type="redirect">%{context-path}$1</to>
++     </rule>
++ </urlrewrite>
+{% endfilter %}
+</div>

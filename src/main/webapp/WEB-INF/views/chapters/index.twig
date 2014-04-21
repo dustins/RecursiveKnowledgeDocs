@@ -1,0 +1,84 @@
+{% extends '../templates/layout.twig' %}
+
+{% block title %}RecursiveKnowledge - Chapters{% endblock %}
+
+{% block pageId %}chapters{% endblock %}
+
+{% block body %}
+    <main>
+        <div class="container">
+            <div class="row">
+                <h1>Chapters</h1>
+
+                <div class="row">
+
+                    <div class="col-md-3 bravo">
+                        <div class="learn-panel disabled">
+                            <h3>How This Works</h3>
+
+                            <p>How to read this guide.</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 bravo">
+                        <a href="{{ "/chapters/create-project" | path }}" class="learn-more">
+                            <div class="learn-panel">
+                                <h3>Create Project</h3>
+
+                                <p>Setup an Apache Maven project.</p>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-md-3 bravo">
+                        <div class="learn-panel disabled">
+                            <h3>Add Dependencies</h3>
+
+                            <p>Add general dependencies.</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 bravo">
+                        <div class="learn-panel disabled">
+                            <h3>Basic MVC</h3>
+
+                            <p>Run a basic MVC with Spring Framework.</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 bravo">
+                        <div class="learn-panel disabled">
+                            <h3>Themed MVC</h3>
+
+                            <p>Get a consistent look.</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 bravo">
+                        <div class="learn-panel disabled">
+                            <h3>Interaction</h3>
+
+                            <p>Accept data from users.</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 bravo">
+                        <div class="learn-panel disabled">
+                            <h3>Persistence</h3>
+
+                            <p>Make that data persistent.</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 bravo">
+                        <div class="learn-panel disabled">
+                            <h3>Indexing</h3>
+
+                            <p>Make that data searchable.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

@@ -1,0 +1,158 @@
+<h1>Project Setup</h1>
+
+
+
+
+<h2 id="first_steps">First Steps</h2>
+<p>The first step on how to make this amazing website is to create the initial project layout. There is no &ldquo;one
+    correct&rdquo; way to layout a project, but there are multiple ways that will make my life easier.</p>
+
+<pre class="right-50 col-md-6">
+> tree ~/Projects/recursiveknowledge
+&#x251C;&#x2500;&#x2500; LICENSE
+&#x251C;&#x2500;&#x2500; README.md
+&#x251C;&#x2500;&#x2500; pom.xml
+&#x2514;&#x2500;&#x2500; src
+    &#x251C;&#x2500;&#x2500; main
+    &#x2502;&nbsp;&nbsp; &#x251C;&#x2500;&#x2500; java
+    &#x2502;&nbsp;&nbsp; &#x251C;&#x2500;&#x2500; resources
+    &#x2502;&nbsp;&nbsp; &#x2514;&#x2500;&#x2500; webapp
+    &#x2502;&nbsp;&nbsp;     &#x2514;&#x2500;&#x2500; META-INF
+    &#x2514;&#x2500;&#x2500; test
+        &#x251C;&#x2500;&#x2500; java
+        &#x2514;&#x2500;&#x2500; resources</pre>
+
+<p>Because I'm going to use Apache Maven <a target="_blank" class="further-reading" href="https://maven.apache.org"><span class="glyphicon glyphicon-book"></span></a> for build automation, it is going to be easiest if I start based on the <a target="_blank" href="https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html" class="external">standard directory layout</a>. Really all that is needed to get going is the <em class="file">pom.xml</em> file, but I created the additional empty folders to show where everything is heading, and added a <em class="file">README.md</em> and <em class="file">LICENSE</em> file that are nice&ndash;to&ndash;haves in every open source project.</p>
+
+
+
+
+<h2 id="pom_pilot">POM Pilot</h2>
+
+<p>A <abbr title="project object model">POM</abbr> file provides all the configuration that instructs Maven what to do. There is a lot of information and configuration that these files can contain that can provide huge amounts of functionality, and for a more in-depth explanation of everything that can be accomplished with one, you can read Apache's Introduction to the POM <a target="_blank" class="further-reading" href="https://maven.apache.org/guides/introduction/introduction-to-the-pom.html"><span class="glyphicon glyphicon-book"></span></a>. But for now I'm going to start with this very simple one&hellip;</p>
+
+<div class="code">
+{% set options = {linenos: true, lexer: "xml"} %}
+{% filter pygments(options) %}
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.recursiveknowledge</groupId>
+    <artifactId>recursiveknowledge</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <name>RecursiveKnowledge</name>
+    <url>http://recursiveknowledge.com</url>
+    <description>A website about how to make itself.</description>
+
+</project>{% endfilter %}
+</div>
+
+<p>The first portion is just a very basic XML declaration with root <code class="nt highlight">&lt;project /&gt;</code> tag that has attributes to define the XML namespace. Then I put a <code class="nt highlight">&lt;modelVersion /&gt;</code> tag to declare what version of POM I'm using.</p>
+
+<div class="code">
+{% set options = {lexer: "xml"} %}
+{% filter pygments(options) %}
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    ...{% endfilter %}
+</div>
+
+<p>After that I'm just declaring properties to uniquely identify this project. When I start adding dependencies to the project you'll see these tags show up again. The Maven schema definition for a POM defines <code class="nt highlight">&lt;groupId /&gt;</code> and <code class="nt highlight">&lt;artifactId /&gt;</code> like this&hellip;</p>
+
+<div class="code">
+    {% set options = {lexer: "xml"} %}
+    {% filter pygments(options) %}
+    <groupId>com.recursiveknowledge</groupId>
+    <artifactId>recursiveknowledge</artifactId>
+    <version>1.0-SNAPSHOT</version>{% endfilter %}
+</div>
+
+<p><blockquote>A universally unique identifier for a project. It is normal to
+    use a fully-qualified package name to distinguish it from other projects with a similar name
+    (eg. &lt;groupId&gt;org.apache.maven&lt;/groupId&gt;).</blockquote></p>
+
+<p><blockquote>The identifier for this artifact that is unique within the group given by the group ID.
+    An artifact is something that is either produced or used by a project. Examples of artifacts produced by
+    Maven for a project include: JARs, source and binary distributions, and WARs.</blockquote></p>
+
+<p>The last bit isn't required but is good to have just for informational purposes. It provides some useful information to us humans who may read this.</p>
+
+<div class="code">
+{% set options = {lexer: "xml"} %}
+{% filter pygments(options) %}
+<name>RecursiveKnowledge</name>
+<url>http://recursiveknowledge.com</url>
+<description>A website about how to make itself.</description>{% endfilter %}
+</div>
+
+
+
+
+<h2 id="license">License</h2>
+
+<pre>
+The MIT License (MIT)
+
+Copyright (c) 2014 Dustin Sweigart
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+</pre>
+
+<p>Having the license right in the root directory makes it clear right up front what the license is for this project. This project is using the MIT License <a target="_blank" class="further-reading" href="http://en.wikipedia.org/wiki/MIT_License"><span class="glyphicon glyphicon-book"></span></a> because it is relatively succinct.</p>
+
+
+
+
+<h2 id="readme">Readme</h2>
+
+<pre>
+RecursiveKnowledge
+==============
+
+A website about how to make itself.
+</pre>
+
+<p>Normally this file will contain information about the project like a more detailed description, instructions for building, places to get help, and/or change lists for each version. The only limit is the attention span of the reader. I'll add more to this as the project progresses, but much like the POM, I'm going to start off simple.</p>
+
+
+
+
+<h2 id="summary">Summary</h2>
+<pre class="summary">
+ <a href="">pom.xml</a>    | 15 <span class="addition">+++++++++++++++</span>
+ <a href="">LICENSE</a>    | 21 <span class="addition">+++++++++++++++++++++</span>
+ <a href="">README.md</a>  |  4 <span class="addition">++++</span>
+ 3 files changed, 40 insertions(<span class="addition">+</span>)
+</pre>
+
+<p>That's it for creating the project! Now I can move on to <a href="{{ "/chapters/adding-dependencies" | path }}">Adding Dependencies</a> so I can start coding as soon as possible.</p>
+
+
+<ul class="nav">
+    <li><a class="prev" href="">Previous Chapter</a></li>
+    <li><a class="next" href="">Next Chapter</a></li>
+</ul>

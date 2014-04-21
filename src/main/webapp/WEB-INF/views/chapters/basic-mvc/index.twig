@@ -1,0 +1,38 @@
+{% extends '../../templates/layout.twig' %}
+
+{% block title %}RecursiveKnowledge - Basic MVC{% endblock %}
+
+{% block pageId %}chapter{% endblock %}
+
+{% block breadcrumbs %}
+<div class="container">
+    <div class="row">
+        <ol class="breadcrumb col-lg-12">
+            <li><a href="{{ "/chapters" | path }}">Chapters</a></li>
+            <li>Basic MVC</li>
+        </ol>
+    </div>
+</div>
+{% endblock %}
+
+{% block body %}
+    <main>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9 col-md-push-3 alpha">
+                    <article>
+                        {% include "basic-mvc.twig" %}
+                    </article>
+                </div>
+                <div class="col-md-3 col-md-pull-9 visible-lg visible-md bravo">
+                    {% include 'sections.twig' %}
+                    {% include 'optional-steps.twig' %}
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+
+{% block javascript %}
+
+{% endblock %}

@@ -1,0 +1,211 @@
+<h1>Create Project</h1>
+
+<h2 id="make_it_maven">Make it Maven</h2>
+
+<p>To make your life easier when building this project and managing dependencies, you should use some sort of <dfn>build automation software</dfn>. We're going to use <a class="external" target="_blank" href="https://maven.apache.org">Apache Maven</a> for this project, but you could just as easily use other tools like <a class="external" target="_blank" href="http://www.gradle.org">Gradle</a>. If you don't already have Apache Maven installed, you can go follow <a class="external" target="_blank" href="http://maven.apache.org/guides/getting-started/maven-in-five-minutes.html#Installation">these simple instructions</a> to get it downloaded and installed. There is no shortage of great information on the <a class="external" target="_blank" href="http://maven.apache.org/guides/">documentation page</a> if you want to fully understand Maven, and I encourage you to spend an afternoon reading it to get your head around the features and concepts of Maven. But that isn't necessary to do before continuing, and you'll be exposed to Maven as needed through the progression of these tutorials.</p>
+
+<p>Really, the only step to turn an empty folder into a Maven project is to create a <a class="external" target="_blank" href="http://maven.apache.org/guides/introduction/introduction-to-the-pom.html">pom.xml</a> file. That is pretty simple, but Maven makes it even simpler for you if you use an <a class="external" target="_blank" href="https://maven.apache.org/guides/introduction/introduction-to-archetypes.html">archetype</a> to generate your project. Try running the following command in your console to create a project using the &ldquo;maven-archetype-webapp&rdquo; provided archetype.</p>
+
+<div class="highlight">
+<pre class="highlight">
+<span class="gp">dustins$</span> mvn archetype:generate \
+  -DgroupId=com.recursiveknowledge \
+  -DartifactId=recursiveknowledge-site \
+  -DarchetypeArtifactId=maven-archetype-webapp \
+  -DinteractiveMode=false
+</pre>
+</div>
+
+<p>You'll see it created a folder, containing that <em class="file">pom.xml</em> we needed, but it also went ahead and created a great starting directory layout for a webapp. If you read the Maven documentation, you may recognize the items created as part of the <a target="_blank" href="https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html" class="external">standard directory layout</a>.</p>
+
+<div class="highlight">
+<pre>
+<span class="gp">dustins$</span> tree .
+.
+&#x251C;&#x2500;&#x2500; pom.xml
+&#x2514;&#x2500;&#x2500; src
+    &#x2514;&#x2500;&#x2500; main
+        &#x251C;&#x2500;&#x2500; resources
+        &#x2514;&#x2500;&#x2500; webapp
+            &#x251C;&#x2500;&#x2500; WEB-INF
+            &#x2502;&nbsp;&nbsp; &#x2514;&#x2500;&#x2500; web.xml
+            &#x2514;&#x2500;&#x2500; index.jsp
+</pre>
+</div>
+
+<p>For now we don't care about the <em class="file">web.xml</em> and <em class="file">index.jsp</em> files. The interesting stuff in the <em class="file">pom.xml</em> that was just generated for you. To see what all these tags do, and look at other possible tags to, check out the <a class="external" target="_blank" href="http://maven.apache.org/ref/3.2.1/maven-model/maven.html#project">Project Descriptor Reference</a>. If you don't read about any of the other tags, at least check out the ones that I highlighted. These tags are used for uniquely identifying an artifact, and will be crucial in the next section when looking more at dependencies.</p>
+
+<div class="file-contents">
+    <p class="name">pom.xml</p>
+{% filter pygments({lexer: 'xml', linenos: true, hl_lines: [5,6,8]}) %}
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.recursiveknowledge</groupId>
+    <artifactId>recursiveknowledge-site</artifactId>
+    <packaging>war</packaging>
+    <version>1.0-SNAPSHOT</version>
+
+    <name>recursiveknowledge-site Maven Webapp</name>
+    <url>http://maven.apache.org</url>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>recursiveknowledge-site</finalName>
+    </build>
+</project>
+{% endfilter %}
+</div>
+
+<h2 id="dependencies">Dependencies</h2>
+
+<p>You can see that in the generated <em class="file">pom.xml</em>, a dependency to the <a class="external" target="_blank" href="http://junit.org/">Junit testing framework</a> was added automatically when the project was generated with the chosen archetype. For a quick read on using external dependencies, I'd recommend the aptly named <a class="external" target="_blank" href="http://maven.apache.org/guides/getting-started/index.html#How_do_I_use_external_dependencies">How do I use external dependencies?</a> to explain.</p>
+
+<p>You are probably wondering where to find dependencies. Many open source libraries will give you the <code class="highlight nt">&lt;dependency /&gt;</code> block to paste into your <abbr title="Project Object Model">POM</abbr> (Project Object Model) on their download page. If you were especially studious in reading the Maven website, you'll likely have seen a link to <a class="external" target="_blank" href="http://search.maven.org/">The Central Repository</a>. The first place I go to look when I want something though is <a class="external" target="_blank" href="http://mvnrepository.com">MvnRepository.com</a>.</p>
+
+<p>I think that having all the version numbers as properties (or variables for us programmers) makes quickly identifying versions used for dependencies easier and using inconsistent versions harder. So go ahead change the JUnit version to a property. If you haven't yet read <a class="external" target="_blank" href="http://maven.apache.org/guides/introduction/introduction-to-the-pom.html">Introduction to the <abbr title="Project Object Model">POM</abbr></a> earlier, I'll save you the trouble and give you <a class="external" target="_blank" href="http://maven.apache.org/guides/introduction/introduction-to-the-pom.html#Properties">the section</a> where it shows you can example.</p>
+
+<div class="file-contents">
+    <p class="name">pom.xml</p>
+{% filter pygments({lexer: 'diff'}) %}
+...
+    <name>recursiveknowledge-site Maven Webapp</name>
+    <url>http://maven.apache.org</url>
+
++    <properties>
++        <junit.version>4.11</junit.version>
++    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+-            <version>4.11</version>
++            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+...
+{% endfilter %}
+</div>
+
+<p>This change from version number to property might seem useless right now, but it is the start of a pattern that will help keep your version numbers better organized. Ok I get it, you don't believe me. Why don't you add <a class="external" target="_blank" href="http://spring.io/">Spring</a> libraries to the project. If you want to search yourself, go to one of the websites mentioned above and look for a groupId of <quote>org.springframework</quote> with <quote>spring-mvc</quote> and <quote>spring-test</quote> for the artifactId.</p>
+
+<div class="file-contents">
+    <p class="name">pom.xml</p>
+{% filter pygments({lexer: 'diff'}) %}
+...
+    <properties>
++		<!-- spring projects -->
++		<spring-framework.version>4.0.3.RELEASE</spring-framework.version>
+
++		<!-- testing -->
+        <junit.version>4.11</junit.version>
+    </properties>
+
+    <dependencies>
++        <dependency>
++            <groupId>org.springframework</groupId>
++            <artifactId>spring-webmvc</artifactId>
++            <version>${spring-framework.version}</version>
++        </dependency>
+
++        <dependency>
++            <groupId>org.springframework</groupId>
++            <artifactId>spring-test</artifactId>
++            <version>${spring-framework.version}</version>
++            <scope>test</scope>
++        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+...
+{% endfilter %}
+</div>
+
+<p>You can see already how we're using our property <code>spring-framework.version</code> to help keep different Spring Framework artifacts consistent in the version we're including. Because these dependencies, are Maven projects themselves, with their own <code class="highlight nt">&lt;dependency /&gt;</code> blocks too, Maven will pull not just want you need to run, but what they need to run too, and continue doing that until it has everything it needs.</p>
+
+<h2 id="not_so_dependencies">Not So Dependent</h2>
+
+<p>Your project is eventually going to actually contain some code. To help follow exactly what it is doing at all times, it is going to be very helpful to log what is going on in it. Many open source projects already contain logging using a standard logging libraries like <a class="external" target="_blank" href="http://commons.apache.org/proper/commons-logging/">Apache Commons Logging</a> or <a class="external" target="_blank" href="https://logging.apache.org/log4j/1.2/">Log4J</a>. Even better is programming to an <dfn>API</dfn> like <a class="external" target="_blank" href="http://www.slf4j.org/">SLF4J</a> where you can swap out actual implementations without changing your code. Because that is such a good idea, you'll want to add the artifacts for the SLF4J API, and the logback library, which natively implements SLF4J's interfaces.</p>
+
+<div class="file-contents">
+    <p class="name">pom.xml</p>
+{% filter pygments({lexer: 'diff'}) %}
+...
+       <spring-framework.version>4.0.3.RELEASE</spring-framework.version>
+
++       <!-- logging -->
++       <slf4j.version>1.7.6</slf4j.version>
++       <logback.version>1.1.1</logback.version>
+
+        <!-- testing -->
+        <junit.version>4.11</junit.version>
+...
+
+...
+        <version>${spring-framework.version}</version>
+    </dependency>
+
++	<dependency>
++		<groupId>org.slf4j</groupId>
++		<artifactId>slf4j-api</artifactId>
++		<version>${slf4j.version}</version>
++	</dependency>
++	<dependency>
++		<groupId>ch.qos.logback</groupId>
++		<artifactId>logback-classic</artifactId>
++		<version>${logback.version}</version>
++	</dependency>
+
+    <dependency>
+        <groupId>org.springframework</groupId>
+...
+{% endfilter %}
+</div>
+
+<p>Almost done setting up our project. There is one problem though. Your using Logback (an SLF4J implementation) but Spring was built using Commons Logging. It is listed as a dependency, so it is included in our project! The NERVE! Luckily the fact that it is included, means it can be excluded without much difficulty. Of course that still means that Spring will be expecting a library that isn't there. This can be fixed by using an <a class="external" target="_blank" href="http://www.slf4j.org/legacy.html">SLF4J bridge</a> that redirect all calls made to another library to SLF4J.</p>
+
+<div class="file-contents">
+    <p class="name">pom.xml</p>
+{% filter pygments({lexer: 'diff'}) %}
+...
+            <artifactId>spring-webmvc</artifactId>
+            <version>${spring-framework.version}</version>
++            <exclusions>
++                <exclusion>
++                    <groupId>commons-logging</groupId>
++                    <artifactId>commons-logging</artifactId>
++                </exclusion>
++            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
++        <dependency>
++            <groupId>org.slf4j</groupId>
++            <artifactId>jcl-over-slf4j</artifactId>
++            <version>${slf4j.version}</version>
++        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+...
+{% endfilter %}
+</div>
+
+<h3 id="ready_to_code">Ready To Code</h3>
+
+<p>That is it for setting up the project. It may not seem like it, but you just laid down solid foundations for a website. You created a project structure that will be recognized by most Java developers, marked your territory in the software world with with your artifact identifiers (<code>groupId</code> and <code>artifactId</code>) and added dependencies that will be used in nearly every step forward.</p>

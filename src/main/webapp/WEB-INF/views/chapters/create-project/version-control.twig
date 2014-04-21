@@ -1,0 +1,36 @@
+{% extends '../../templates/layout.twig' %}
+
+{% block title %}RecursiveKnowledge - Create Project / Version Controlled Code{% endblock %}
+
+{% block pageId %}chapter{% endblock %}
+
+{% block breadcrumbs %}
+<div class="container">
+    <div class="row">
+        <ol class="breadcrumb">
+            <li><a href="{{ "/chapters" | path }}">Chapters</a></li>
+            <li><a href="{{ "/chapters/create-project" | path }}">Create Project</a></li>
+            <li>Version Controlled Code</li>
+        </ol>
+    </div>
+</div>
+{% endblock %}
+
+{% block body %}
+    <main>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-3 bravo">
+                    {% include 'sections.twig' %}
+                    {% include 'optional-steps.twig' %}
+                </div>
+                <div class="col-sm-9 alpha">
+                    <article>
+                        <h1>Version Controlled Code</h1>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus amet animi aut deserunt dolore doloribus excepturi iusto labore, maxime minima nam nesciunt nisi non obcaecati, ratione reiciendis rerum sequi tempore.</p>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

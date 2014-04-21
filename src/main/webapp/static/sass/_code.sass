@@ -1,0 +1,267 @@
+@import "code/diff.sass"
+
+.file-contents
+  border: 1px solid #ccc
+  border-radius: 4px
+  margin-bottom: 10px
+
+  p.name
+    background: #ccc
+    padding: 5px
+    margin: 0 !important
+    font-size: 0.9em
+    color: rgba(0,0,0,0.6)
+
+  & .highlighttable, & .highlight pre
+    border: 0
+
+  pre
+    margin: 0
+
+.highlighttable
+  border: 1px solid #ccc
+  border-radius: 4px
+
+  pre
+    border: none
+    margin: 0
+
+  .linenos
+    border-radius: 0
+    border-right: 1px solid #ccc
+
+table.highlighttable
+  &, tbody, tr, td
+    display: block
+
+  td.linenos
+    float: left
+
+.highlight, code.highlight
+  background: #f8f8f8
+  width: 100%
+
+  .hll, &.hll
+    background-color: #ffffcc
+
+  /* Comment 
+  .c, &.c
+    color: rgba(131, 144, 145, 0.75)
+    font-style: italic
+
+  /* Error 
+  .err, &.err
+    border: 1px solid red
+
+  /* Keyword 
+  .k, &.k
+    color: #008000
+    font-weight: bold
+
+  /* Operator 
+  .o
+    color: #666666
+
+  /* Comment.Multiline, Comment.Multiline 
+  .cm, &.cm
+    color: #408080
+    font-style: italic
+
+  /* Comment.Preproc 
+  .cp, &.cp
+    color: #bc7a00
+
+  /* Comment.Single, Comment.Special 
+  .c1, &.c1, .cs, &.cs
+    color: #408080
+    font-style: italic
+
+  /* Generic.Deleted 
+  .gd, &.gd
+    color: #a00000
+
+  /* Generic.Emph 
+  .ge, &.ge
+    font-style: italic
+
+  /* Generic.Error 
+  .gr, &.gr
+    color: red
+
+  /* Generic.Heading 
+  .gh, &.gh
+    color: #000080
+    font-weight: bold
+
+  /* Generic.Inserted 
+  .gi, &.gi
+    color: #00a000
+
+  /* Generic.Output 
+  .go, &.go
+    color: gray
+
+  /* Generic.Prompt 
+  .gp, &.gp
+    color: #000080
+    font-weight: bold
+
+  /* Generic.Strong 
+  .gs, &.gs
+    font-weight: bold
+
+  /* Generic.Subheading 
+  .gu, &.gu
+    color: #800080
+    font-weight: bold
+
+  /* Generic.Traceback 
+  .gt, &.gt
+    color: #0040d0
+
+  /* Keyword.Constant, Keyword.Declaration, Keyword.Namespace 
+  .kc, &.kc, .kd, &.kd, .kn, &.kn
+    color: #008000
+    font-weight: bold
+
+  /* Keyword.Pseudo 
+  .kp, &.kp
+    color: green
+
+  /* Keyword.Reserved 
+  .kr, &.kr
+    color: #008000
+    font-weight: bold
+
+  /* Keyword.Type 
+  .kt, &.kt
+    color: #b00040
+
+  /* Literal.Number 
+  .m, &.m
+    color: #666666
+
+  /* Literal.String 
+  .s, &.s
+    color: #ba2121
+
+  /* Name.Attribute 
+  .na, &.na
+    color: #7d9029
+
+  /* Name.Builtin 
+  .nb, &.nb
+    color: green
+
+  /* Name.Class 
+  .nc, &.nc
+    color: #0000FF
+    font-weight: bold
+
+  /* Name.Constant 
+  .no, &.no
+    color: #880000
+
+  /* Name.Decorator 
+  .nd, &.nd
+    color: #aa22ff
+
+  /* Name.Entity 
+  .ni, &.ni
+    color: #999999
+    font-weight: bold
+
+  /* Name.Exception 
+  .ne, &.ne
+    color: #D2413A
+    font-weight: bold
+
+  /* Name.Function 
+  .nf, &.nf
+    color: blue
+
+  /* Name.Label 
+  .nl, &.nl
+    color: #a0a000
+
+  /* Name.Namespace 
+  .nn, &.nn
+    color: #0000FF
+    font-weight: bold
+
+  /* Name.Tag 
+  .nt, &.nt
+    color: #008000
+    font-weight: bold
+
+  /* Name.Variable 
+  .nv, &.nv
+    color: #19177c
+
+  /* Operator.Word 
+  .ow, &.ow
+    color: #AA22FF
+    font-weight: bold
+
+  /* Text.Whitespace
+  .w, &.w
+    color: #bbbbbb
+
+  /* Literal.Number.Float, Literal.Number.Hex, Literal.Number.Integer, Literal.Number.Oct
+  .mf, &.mf, .mh, &.mh, .mi, &.mi, .mo, &.mo
+    color: #666666
+    
+  /* Literal.String.Backtick, Literal.String.Char
+  .sb, &.sb, .sc, &.sc
+    color: #ba2121
+    
+  /* Literal.String.Doc
+  .sd, &.sd
+    color: #BA2121
+    font-style: italic
+    
+  /* Literal.String.Double
+  .s2, &.s2
+    color: #ba2121
+    
+  /* Literal.String.Escape
+  .se, &.se
+    color: #BB6622
+    font-weight: bold
+    
+  /* Literal.String.Heredoc
+  .sh, &.sh
+    color: #ba2121
+    
+  /* Literal.String.Interpol
+  .si, &.si
+    color: #BB6688
+    font-weight: bold
+    
+  /* Literal.String.Other
+  .sx, &.sx
+    color: green
+    
+  /* Literal.String.Regex
+  .sr, &.sr
+    color: #bb6688
+    
+  /* Literal.String.Single
+  .s1, &.s1
+    color: #ba2121
+
+  /* Literal.String.Symbol 
+  .ss, &.ss
+    color: #19177c
+
+  /* Name.Builtin.Pseudo 
+  .bp, &.bp
+    color: green
+
+  /* Name.Variable.Class, Name.Variable.Global, Name.Variable.Instance 
+  .vc, &.vc, .vg, &.vg, .vi, &.vi
+    color: #19177c
+
+  /* Literal.Number.Integer.Long 
+  .il, &.il
+    color: #666666

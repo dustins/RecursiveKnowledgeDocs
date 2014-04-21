@@ -13,3 +13,7 @@
 
 # Maven
 target/
+
+# Project
+
+.sass-cache
